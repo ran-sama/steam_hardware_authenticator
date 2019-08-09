@@ -1,10 +1,10 @@
 # steam_hardware_authenticator
 Generate Steam Guard tokens with an esp8266 driven SSD1306 OLED.
 
-![alt text](https://raw.githubusercontent.com/ran-sama/steam_hardware_authenticator/master/flavours.png)
-![alt text](https://raw.githubusercontent.com/ran-sama/steam_hardware_authenticator/master/on_battery.jpg)
-![alt text](https://raw.githubusercontent.com/ran-sama/steam_hardware_authenticator/master/ds3231_wire_setup.jpg)
-![alt text](https://raw.githubusercontent.com/ran-sama/steam_hardware_authenticator/master/setup_behind_screen.jpg)
+![alt text](https://raw.githubusercontent.com/ran-sama/steam_hardware_authenticator/master/images/flavours.png)
+![alt text](https://raw.githubusercontent.com/ran-sama/steam_hardware_authenticator/master/images/on_battery.jpg)
+![alt text](https://raw.githubusercontent.com/ran-sama/steam_hardware_authenticator/master/images/ds3231_wire_setup.jpg)
+![alt text](https://raw.githubusercontent.com/ran-sama/steam_hardware_authenticator/master/images/setup_behind_screen.jpg)
 
 ## Dependencies
 ```
@@ -66,7 +66,7 @@ https://github.com/pasko-zh/brzo_i2c
 https://github.com/ThingPulse/esp8266-oled-ssd1306
 ```
 
-![alt text](https://raw.githubusercontent.com/ran-sama/steam_hardware_authenticator/master/future_auth.png)
+![alt text](https://raw.githubusercontent.com/ran-sama/steam_hardware_authenticator/master/images/future_auth.png)
 
 ## Notes on compiling for the ESP32
 Don't do this if you use the ESP8266. If compiling doesn't work remove these two lines from sha1.cpp:
