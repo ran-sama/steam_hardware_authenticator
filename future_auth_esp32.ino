@@ -19,6 +19,11 @@ int myOffset, extractedInt, polished, wallTime, wallHour, wallMin, wallSec, days
 uint8_t time1, time2, time3, time4;
 double lostMillis, yearsPassedDbl, daysPassedDbl;
 
+int myDST = 0;
+int myDays, myYearDays, myWeekDay, myFebruary, dayOfMonth;
+int epochBeginning = 1970;
+bool myLeap = false;
+
 IPAddress timeServerIP;
 byte packetBuffer[48];
 
@@ -77,16 +82,42 @@ WiFi.begin(ssid, pass);
     lostMillis = ((double(ntpMicrosec) / double(4294967296)) + 0.1)*1000; // add 100ms intrinsic delay
     epoch = secsSince1900 - seventyYears;
 
-yearsPassedDbl = (epoch / 86400) / 365.25;
-yearsPassedInt = int(yearsPassedDbl);
-daysPassedDbl = yearsPassedDbl - yearsPassedInt;
-daysPassedInt = daysPassedDbl * 365.25;
+myDays = epoch / 86400;
+myWeekDay = (myDays + 4) % 7 + 1;
 
-if(daysPassedInt > 86 && daysPassedInt < 300){
-  daylightSavingsTime = 3600;
+while(1){
+  myYearDays = (myLeap == false) ? 365 : 366;
+  myDays = myDays - myYearDays;
+  epochBeginning++;
+  if(epochBeginning%4==0 && epochBeginning%100!=0 || epochBeginning%400==0){
+    myLeap = true;
   } else {
-  daylightSavingsTime = 0;
+    myLeap = false;
   }
+  if (myDays+1 <= 365 && myLeap == false){
+    break;
+  }
+  if (myDays+1 <= 366 && myLeap == true){
+    break;
+  }
+}
+myFebruary = (myLeap == false) ? 28 : 29;
+//This code below only covers European Daylight Saving Time, for US DST make changes according to:
+//https://stackoverflow.com/questions/5590429/calculating-daylight-saving-time-from-only-date/5590518#5590518
+if (myDays+1 > 62+myFebruary && myDays+1 <= 245+myFebruary){
+  myDST = 1;
+} else if (myDays+1 > 31+myFebruary && myDays+1 <= 62+myFebruary){
+  dayOfMonth = (myDays+1) - (31+myFebruary);
+  if ((dayOfMonth - myWeekDay) >= 25){
+    myDST = 1;
+  }
+} else if (myDays+1 > 245+myFebruary && myDays+1 <= 276+myFebruary){
+  dayOfMonth = (myDays+1) - (245+myFebruary);
+  if ((dayOfMonth - myWeekDay) < 25){
+    myDST = 1;
+  }
+}
+myDST = myDST * 3600;
 }
 
 void loop()
@@ -134,7 +165,7 @@ polished /= 26;
 
 const char* charToken = authToken.c_str();
 
-wallTime = timeoutput + daylightSavingsTime + 3600  ; //ADD 1 Hours (For GMT+1)
+wallTime = timeoutput + myDST + 3600  ; //ADD 1 Hours (For GMT+1)
 // print the hour, minute and second:
 wallHour=(wallTime  % 86400L) / 3600;
 wallMin=(wallTime % 3600) / 60;
