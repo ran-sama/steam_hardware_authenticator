@@ -69,7 +69,7 @@ https://github.com/ThingPulse/esp8266-oled-ssd1306
 ![alt text](https://raw.githubusercontent.com/ran-sama/steam_hardware_authenticator/master/images/future_auth.png)
 
 ## Notes on compiling for the ESP32
-Don't do this if you use the ESP8266. If compiling doesn't work remove these two lines from sha1.cpp:
+Don't do this if you use the ESP8266. If compiling doesn't work, put comment slashes in front of these two lines inside sha1.cpp and sha256.cpp:
 ```
 #include <avr/io.h>
 #include <avr/pgmspace.h>
